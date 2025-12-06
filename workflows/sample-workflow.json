@@ -1,0 +1,175 @@
+{
+  "name": "sample-workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Image Aspect Ratio Cropper Demo",
+        "formDescription": "Upload an image and select your desired aspect ratio. The image will be center-cropped to match the selected ratio perfectly.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "=Image",
+              "fieldType": "file",
+              "multipleFiles": false,
+              "acceptFileTypes": ".jpg,.jpeg,.png,.webp,.gif,.tiff,.tif,.svg",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Target Aspect Ratio",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "1:1"
+                  },
+                  {
+                    "option": "2:3"
+                  },
+                  {
+                    "option": "3:2"
+                  },
+                  {
+                    "option": "3:4"
+                  },
+                  {
+                    "option": "4:3"
+                  },
+                  {
+                    "option": "4:5"
+                  },
+                  {
+                    "option": "5:4"
+                  },
+                  {
+                    "option": "9:16"
+                  },
+                  {
+                    "option": "16:9"
+                  },
+                  {
+                    "option": "21:9"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "responseMode": "lastNode",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -128,
+        256
+      ],
+      "id": "30538105-51c6-463e-8967-4643af9933f0",
+      "name": "Form Input",
+      "webhookId": "aspect-ratio-cropper-demo"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare input for the cropper node\n// Extract aspectRatio from form and rename binary key to 'data'\n\nconst item = $input.first();\nconst aspectRatio = item.json['Target Aspect Ratio'];\n\nif (!item.binary || !item.binary.Image) {\n  throw new Error('Image file is required. Please upload an image.');\n}\n\nreturn [{\n  json: {\n    aspectRatio,  // Pass to cropper via expression\n    originalFileName: item.binary.Image.fileName || 'image'\n  },\n  binary: {\n    data: item.binary.Image\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        96,
+        256
+      ],
+      "id": "03c17333-87a4-4980-adc3-e17502265432",
+      "name": "Prepare Input"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format final output with human-readable information\n\nconst item = $input.first();\nconst json = item.json;\n\nlet message;\nif (json.cropped) {\n  message = `✅ Image successfully cropped to ${json.aspectRatio}\\n` +\n    `Original: ${json.originalWidth}×${json.originalHeight}\\n` +\n    `Cropped: ${json.croppedWidth}×${json.croppedHeight}\\n` +\n    `Position: (${json.positionX}, ${json.positionY})`;\n} else {\n  message = `ℹ️ Image already matches ${json.aspectRatio}\\n` +\n    `Dimensions: ${json.originalWidth}×${json.originalHeight}\\n` +\n    `No cropping needed.`;\n}\n\nreturn [{\n  json: {\n    ...json,\n    displayMessage: message\n  },\n  binary: item.binary\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        256
+      ],
+      "id": "82509315-7bc4-4b03-ab29-f3c0992693e5",
+      "name": "Format Output"
+    },
+    {
+      "parameters": {
+        "content": "## Image Aspect Ratio Cropper - Demo Workflow\n\nThis workflow demonstrates how to use the Image Aspect Ratio Cropper node.\n\n**Key Point:** The `aspectRatio` parameter accepts **expressions**!\n\nIn the Cropper node, we use:\n```\n{{ $json.aspectRatio }}\n```\n\nThis passes the user's selection from the form to the cropper dynamically.",
+        "height": 312,
+        "width": 576,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -144,
+        -96
+      ],
+      "id": "6740ae94-2f0b-471b-98d9-a675cc74ddb5",
+      "name": "Workflow Description"
+    },
+    {
+      "parameters": {
+        "aspectRatio": "={{ $json.aspectRatio }}"
+      },
+      "type": "n8n-nodes-image-aspect-ratio-cropper.imageAspectRatioCropper",
+      "typeVersion": 1,
+      "position": [
+        304,
+        256
+      ],
+      "id": "95635652-bbe1-49cb-bd13-f340f9da9d5f",
+      "name": "Image Aspect Ratio Cropper"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Form Input": {
+      "main": [
+        [
+          {
+            "node": "Prepare Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Input": {
+      "main": [
+        [
+          {
+            "node": "Image Aspect Ratio Cropper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Aspect Ratio Cropper": {
+      "main": [
+        [
+          {
+            "node": "Format Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f0704040-fa7c-4cd0-9aec-eb958a7bb3df",
+  "meta": {
+    "instanceId": "ad8bd1438d783b86c795879f4650f249bbb6ac0f3e6c226aa2e7261ea11127a5"
+  },
+  "id": "qV4mH8rwW1y74agq",
+  "tags": []
+}
