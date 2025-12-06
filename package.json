@@ -5,12 +5,18 @@
   "keywords": [
     "n8n-community-node-package",
     "n8n",
+    "n8n-nodes",
     "image",
     "crop",
+    "aspect",
+    "ratio",
     "aspect-ratio",
     "resize",
     "cover",
-    "center-crop"
+    "center-crop",
+    "cropper",
+    "editor",
+    "automation"
   ],
   "license": "MIT",
   "homepage": "https://github.com/LinkAIBrain/n8n-nodes-image-aspect-ratio-cropper",
