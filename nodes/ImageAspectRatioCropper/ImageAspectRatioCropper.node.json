@@ -1,0 +1,24 @@
+{
+  "node": "n8n-nodes-image-aspect-ratio-cropper.imageAspectRatioCropper",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": ["Data Transformation"],
+  "subcategories": {
+    "Data Transformation": ["Image Processing"]
+  },
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://github.com/LinkAIBrain/n8n-nodes-image-aspect-ratio-cropper"
+      }
+    ]
+  },
+  "alias": ["image", "crop", "aspect ratio", "resize", "cover", "center crop"],
+  "prompts": [
+    {
+      "title": "Crop images to specific aspect ratios",
+      "description": "Center-crop images to match common aspect ratios like 16:9, 1:1, 9:16 for social media and video platforms."
+    }
+  ]
+}
+

@@ -1,0 +1,30 @@
+# Source files
+nodes/
+*.ts
+!dist/**/*.js
+!dist/**/*.d.ts
+
+# Development files
+.eslintrc.js
+.prettierrc
+tsconfig.json
+gulpfile.js
+
+# Documentation that's not needed in the package
+PUBLISHING.md
+
+# Development folders
+.git/
+.github/
+.vscode/
+.idea/
+
+# Test files
+*.test.ts
+*.spec.ts
+__tests__/
+
+# OS files
+.DS_Store
+Thumbs.db
+
